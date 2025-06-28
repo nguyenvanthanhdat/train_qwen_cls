@@ -27,11 +27,11 @@ if __name__ =='__main__':
     #print(formatted_text)
 
     def preprocess_function(examples):
-        texts = [format_prompt(s) for s in zip(examples["sentece"])]
+        texts = [format_prompt(s) for s in zip(examples["sentence"])]
         tokenized = tokenizer(texts, truncation=True)
         return {
             "input_ids": tokenized["input_ids"],
-            "label": [label_map[label] for label in examples["label"]]  # Overwrite "label"
+            "label": examples["label"]  # Overwrite "label"
         }
 
     dataset = dataset.map(preprocess_function, batched=True)
@@ -45,11 +45,13 @@ if __name__ =='__main__':
     id2label = {0: "negative", 1: "neutral", 2: "positve"}
     label2id = {"negative": 0, "neutral": 1, "positve": 2} 
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=3, trust_remote_code=True, label2id = label2id, id2label=id2label)
+    tokenizer.pad_token = tokenizer.eos_token
+    model.config.pad_token_id = model.config.eos_token_id
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer, return_tensors="pt")
 
     training_args = TrainingArguments(
         output_dir="Qwenv2.5_VSFC_results",
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         logging_strategy="epoch",
         lr_scheduler_type="cosine",

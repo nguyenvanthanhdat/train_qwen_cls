@@ -6,13 +6,13 @@ import numpy as np
 
 if __name__ =='__main__':
 
-    dataset = load_dataset("tmnam20/ViGLUE", subset='mrpc')
+    dataset = load_dataset("tmnam20/ViGLUE", name='mrpc')
     dataset.pop("test",None)  # Drop the test set
     train_dataset = dataset["train"]
     val_dataset = dataset["validation"]
     model_name = "./checkpoint-116000"  
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    #print(train_dataset[2])
+    tokenizer.pad_token = tokenizer.eos_token
     label_map = {"not_equivalent": 0, "equivalent": 1}  # Convert to numerical labels
 
     def format_prompt(sentence1, sentence2, label = None):
@@ -26,7 +26,7 @@ if __name__ =='__main__':
         tokenized = tokenizer(texts, truncation=True)
         return {
             "input_ids": tokenized["input_ids"],
-            "label": [label_map[label] for label in examples["label"]]  # Overwrite "label"
+            "label": examples["label"]
         }
 
     dataset = dataset.map(preprocess_function, batched=True)
@@ -40,18 +40,20 @@ if __name__ =='__main__':
     id2label = {0: "not_equivalent", 1: "equivalent"}
     label2id = {"not_equivalent": 0, "equivalent": 1}
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2, trust_remote_code=True, label2id = label2id, id2label=id2label)
+    #tokenizer.pad_token = tokenizer.eos_token
+    model.config.pad_token_id = model.config.eos_token_id
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer, return_tensors="pt")
 
     training_args = TrainingArguments(
         output_dir="Qwenv2.5_MRPC_results",
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         logging_strategy="epoch",
         lr_scheduler_type="cosine",
         per_device_train_batch_size=16,
         per_device_eval_batch_size=16,
         gradient_accumulation_steps=2,
-        num_train_epochs=5,
+        num_train_epochs=3,
         learning_rate=2e-5,
         weight_decay=0.01,
         bf16=True,  

@@ -61,12 +61,14 @@ if __name__ =='__main__':
     }
 
     label2id = {v: k for k, v in id2label.items()}
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2, trust_remote_code=True, label2id = label2id, id2label=id2label)
+    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=len(id2label), trust_remote_code=True, label2id = label2id, id2label=id2label)
+    tokenizer.pad_token = tokenizer.eos_token
+    model.config.pad_token_id = model.config.eos_token_id
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer, return_tensors="pt")
 
     training_args = TrainingArguments(
-        output_dir="Qwenv2.5_MRPC_results",
-        evaluation_strategy="epoch",
+        output_dir="Qwenv2.5_VTOC_results",
+        eval_strategy="epoch",
         save_strategy="epoch",
         logging_strategy="epoch",
         lr_scheduler_type="cosine",

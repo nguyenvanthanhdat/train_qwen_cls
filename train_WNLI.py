@@ -46,10 +46,12 @@ if __name__ =='__main__':
     id2label = {0: "entailment", 1: "non_entailment"}
     label2id = {"entailment": 0, "non_entailment": 1}
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2, trust_remote_code=True, label2id = label2id, id2label=id2label)
+    tokenizer.pad_token = tokenizer.eos_token
+    model.config.pad_token_id = model.config.eos_token_id
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer, return_tensors="pt")
 
     training_args = TrainingArguments(
-        output_dir="Qwenv2.5_MNLI_results",
+        output_dir="Qwenv2.5_WNLI_results",
         eval_strategy="epoch",
         save_strategy="epoch",
         logging_strategy="epoch",
