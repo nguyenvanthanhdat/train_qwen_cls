@@ -74,11 +74,12 @@ if __name__ =='__main__':
         num_train_epochs=3,
         learning_rate=2e-5,
         weight_decay=0.01,
+        save_total_limit=3,
         # bf16=True,  
         fp16=True,
         load_best_model_at_end=True,
         push_to_hub=False,
-        use_liger_kernel=True,
+        # use_liger_kernel=True,
     )
 
     trainer = Trainer(
