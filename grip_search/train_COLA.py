@@ -109,4 +109,13 @@ if __name__ =='__main__':
         compute_objective=compute_objective,
     )
 
+    best_model = AutoModelForSequenceClassification.from_pretrained(
+        best_trials.run_id, 
+        num_labels=2, 
+        trust_remote_code=True, 
+        label2id = label2id, 
+        id2label=id2label
+    )
+    best_model.push_to_hub("Qwen2.5_COLA_results")
+    tokenizer.push_to_hub("Qwen2.5_COLA_results")
     # trainer.train()
