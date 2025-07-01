@@ -14,15 +14,21 @@ def optuna_hp_space(trial):
 
 if __name__ =='__main__':
 
-    dataset = load_dataset("tmnam20/ViGLUE", split='train', name='cola')
+    dataset_train = load_dataset("  ", split='train', name='cola')
     #dataset.pop("test",None)  # Drop the test set
-    split_dataset = dataset.train_test_split(test_size=0.1, seed=42)
+    dataset_val = load_dataset("tmnam20/ViGLUE", split='validation', name='cola')
+    # split_dataset = dataset.train_test_split(test_size=0.1, seed=42)
+    # dataset = DatasetDict({
+    #     "train": split_dataset['train'],
+    #     "validation": split_dataset['test']
+    # })
     dataset = DatasetDict({
-        "train": split_dataset['train'],
-        "validation": split_dataset['test']
+        "train": dataset_train,
+        "validation": dataset_val
     })
     train_dataset = dataset["train"]
     val_dataset = dataset["validation"]
+
     model_name = "./checkpoint-116000"  
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     tokenizer.pad_token = tokenizer.eos_token
