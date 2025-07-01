@@ -116,6 +116,6 @@ if __name__ =='__main__':
         label2id = label2id, 
         id2label=id2label
     )
-    best_model.push_to_hub("Qwen2.5_COLA_results")
-    tokenizer.push_to_hub("Qwen2.5_COLA_results")
+    best_model.push_to_hub("presencesw/Qwen2.5_COLA_results")
+    tokenizer.push_to_hub("presencesw/Qwen2.5_COLA_results")
     # trainer.train()
