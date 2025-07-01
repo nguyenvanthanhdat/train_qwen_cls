@@ -14,7 +14,7 @@ def optuna_hp_space(trial):
 
 if __name__ =='__main__':
 
-    dataset_train = load_dataset("  ", split='train', name='cola')
+    dataset_train = load_dataset("tmnam20/ViGLUE", split='train', name='cola')
     #dataset.pop("test",None)  # Drop the test set
     dataset_val = load_dataset("tmnam20/ViGLUE", split='validation', name='cola')
     # split_dataset = dataset.train_test_split(test_size=0.1, seed=42)
@@ -84,7 +84,7 @@ if __name__ =='__main__':
         # bf16=True,  
         fp16=True,
         load_best_model_at_end=True,
-        push_to_hub=False,
+        push_to_hub=True,
         # use_liger_kernel=True,
     )
 
