@@ -87,7 +87,7 @@ if __name__ =='__main__':
     )
 
     trainer = Trainer(
-        model=model,
+        model_init=model_init,
         args=training_args,
         train_dataset=dataset["train"],
         eval_dataset=dataset["validation"],
