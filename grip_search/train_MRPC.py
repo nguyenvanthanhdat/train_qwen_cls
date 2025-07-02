@@ -44,7 +44,7 @@ if __name__ =='__main__':
         }
 
     def compute_metrics(eval_pred):
-        predictions, labels = eval_pred.predictions, eval_pred.label_ids
+        predictions, labels = eval_pred
         predictions = np.argmax(predictions, axis=1)
         result = accuracy.compute(predictions=predictions, references=labels)
         return result if result is not None else {"accuracy": 0.0}
