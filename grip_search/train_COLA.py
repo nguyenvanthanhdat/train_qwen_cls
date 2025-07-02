@@ -84,7 +84,7 @@ if __name__ =='__main__':
         # bf16=True,  
         fp16=True,
         load_best_model_at_end=True,
-        push_to_hub=True,
+        push_to_hub=False,
         # use_liger_kernel=True,
     )
 
@@ -116,6 +116,26 @@ if __name__ =='__main__':
         label2id = label2id, 
         id2label=id2label
     )
-    best_model.push_to_hub("presencesw/Qwen2.5_COLA_results")
+
+    trainer = Trainer(
+        model=best_model,  # You MUST have used `model_init` in original trainer
+        args=training_args,
+        train_dataset=dataset["train"],
+        eval_dataset=dataset["validation"],
+        processing_class=tokenizer,
+        data_collator=data_collator,
+        compute_metrics=compute_metrics,
+        load_best_model_at_end=True,
+    )
+
+    trainer.args = trainer.args.replace(
+        **best_trials.hyperparameters
+    )
+
+    trainer.train()
+    trainer.push_to_hub("presencesw/Qwen2.5_COLA_results")
     tokenizer.push_to_hub("presencesw/Qwen2.5_COLA_results")
+    # best_model.push_to_hub("presencesw/Qwen2.5_COLA_results")
+    # tokenizer.push_to_hub("presencesw/Qwen2.5_COLA_results")
+    # print(best_trials)
     # trainer.train()
