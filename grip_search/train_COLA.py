@@ -109,23 +109,21 @@ if __name__ =='__main__':
         compute_objective=compute_objective,
     )
 
-    best_model = AutoModelForSequenceClassification.from_pretrained(
-        best_trials.run_id, 
-        num_labels=2, 
-        trust_remote_code=True, 
-        label2id = label2id, 
-        id2label=id2label
-    )
+    # best_model = AutoModelForSequenceClassification.from_pretrained(
+    #     best_trials.run_id, 
+    #     num_labels=2, 
+    #     trust_remote_code=True, 
+    #     label2id = label2id, 
+    #     id2label=id2label
+    # )
 
     trainer = Trainer(
-        model=best_model,  # You MUST have used `model_init` in original trainer
+        model_init=model_init,  # You MUST have used `model_init` in original trainer
         args=training_args,
-        train_dataset=dataset["train"],
-        eval_dataset=dataset["validation"],
-        processing_class=tokenizer,
+        train_dataset=dataset['train'],
+        eval_dataset=dataset['validation'],
         data_collator=data_collator,
         compute_metrics=compute_metrics,
-        load_best_model_at_end=True,
     )
 
     trainer.args = trainer.args.replace(
