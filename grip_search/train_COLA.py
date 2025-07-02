@@ -154,7 +154,7 @@ if __name__ =='__main__':
     )
 
     trainer.train()
-    trainer.push_to_hub("presencesw/Qwen2.5_COLA_results")
+    trainer.model.push_to_hub("presencesw/Qwen2.5_COLA_results")
     tokenizer.push_to_hub("presencesw/Qwen2.5_COLA_results")
     # best_model.push_to_hub("presencesw/Qwen2.5_COLA_results")
     # tokenizer.push_to_hub("presencesw/Qwen2.5_COLA_results")
