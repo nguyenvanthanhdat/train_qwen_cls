@@ -126,6 +126,23 @@ if __name__ =='__main__':
         **best_trials.hyperparameters  # Apply the best hyperparameters
     )
 
+    best_training_args = TrainingArguments(
+        output_dir="Qwenv2.5_QNLI_results",
+        eval_strategy="epoch",
+        save_strategy="epoch",
+        logging_strategy="epoch",
+        lr_scheduler_type="cosine",
+        per_device_eval_batch_size=3,
+        gradient_accumulation_steps=2,
+        num_train_epochs=3,
+        weight_decay=0.01,
+        save_total_limit=3,
+        fp16=True,
+        load_best_model_at_end=True,
+        push_to_hub=False,
+        **best_trials.hyperparameters  # Apply the best hyperparameters
+    )
+
     trainer = Trainer(
         model_init=model_init,
         args=best_training_args,  # Use the updated training arguments
@@ -134,10 +151,6 @@ if __name__ =='__main__':
         processing_class=tokenizer,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
-    )
-
-    trainer.args = trainer.args.replace(
-        **best_trials.hyperparameters
     )
 
     trainer.train()
