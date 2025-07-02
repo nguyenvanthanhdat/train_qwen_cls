@@ -96,12 +96,15 @@ if __name__ =='__main__':
         compute_metrics=compute_metrics,
     )
 
+    def compute_objective(metrics):
+        return metrics["eval_accuracy"]
+
     best_trials = trainer.hyperparameter_search(
         direction="maximize",
         backend="optuna",
         hp_space=optuna_hp_space,
         n_trials=20,
-        compute_objective=compute_metrics,
+        compute_objective=compute_objective,
     )
 
     best_training_args = TrainingArguments(
