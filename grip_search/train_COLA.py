@@ -26,8 +26,8 @@ if __name__ =='__main__':
         "train": dataset_train,
         "validation": dataset_val
     })
-    train_dataset = dataset["train"]
-    val_dataset = dataset["validation"]
+    # train_dataset = dataset["train"]
+    # val_dataset = dataset["validation"]
 
     model_name = "./checkpoint-116000"  
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
